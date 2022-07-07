@@ -1,13 +1,58 @@
-use colorism::{foreground::Fore, util::RESET};
-use reqwest::blocking::get;
 use std::io::Write;
 use std::fs::File;
+use std::thread;
+use std::process::exit;
 
-pub fn download(url: String) {
-    let video_req = get(url).expect("Failed to request video binary");
-    let mut file = File::create("video.mp4").expect("Failed to create file");
+use colorism::{foreground::Fore, util::RESET};
+use reqwest::blocking::get;
+use indicatif::{ProgressBar, ProgressStyle};
 
-    file.write_all(&video_req.bytes().expect("Failed to parse video as bytes")).expect("Failed to write file");
+pub fn download(url: String, filename: String) {
+    let video_req = get(url)
+        .expect("Failed to request video binary");
+        
+    let total_size = video_req
+        .content_length()
+        .expect("Failed to get content length");
 
-    println!("\n{}>>> Video downloaded succesfully!{}", Fore::color(Fore::BdGreen), RESET);
+    println!("");
+
+    let pb = ProgressBar::new(total_size);
+
+    pb
+        .set_style(ProgressStyle::default_bar()
+        .template("{spinner:.green} | {bytes}/{total_bytes} {bar:40.green/white} ({eta})")
+        .progress_chars("▉>."));
+
+    let mut file = File::create(&filename)
+        .expect("Failed to create file");
+
+    let file_size = File::open(&filename)
+        .expect("Failed to open file")
+        .metadata()
+        .unwrap()
+        .len();
+
+    thread::spawn(move || {
+        file
+            .write_all(&video_req.bytes().expect("Failed to parse video as bytes"))
+            .expect("Failed to write file");
+    });
+
+    while file_size < total_size {
+        let file_size = File::open(&filename)
+            .expect("Failed to open file")
+            .metadata()
+            .unwrap()
+            .len();
+
+        pb.set_position(file_size);
+
+        if file_size == total_size {
+            pb.finish();
+    
+            println!("\n{}>>> Video downloaded succesfully!{}", Fore::color(Fore::BdGreen), RESET);
+            exit(3);
+        }
+    };
 }
