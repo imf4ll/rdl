@@ -1,15 +1,14 @@
-use crate::modules::twitter;
 use colorism::{foreground::Fore, util::RESET};
-use std::io::stdin;
 use crate::utils::download::download;
+use crate::modules::twitter;
+use std::io::stdin;
 
 pub fn get(url: String) {
-    let formats = twitter::get_video(url);
+    let qualities = twitter::get_video(url);
 
-    let qualities_borrow = &formats;
+    println!("{}[>] {} qualities available...{}\n", Fore::color(Fore::BdGreen), qualities.len(), RESET);
 
-    println!("{}[>] {} qualities available...{}\n", Fore::color(Fore::BdGreen), qualities_borrow.len(), RESET);
-
+    let qualities_borrow = &qualities;
     for (k, format) in qualities_borrow.into_iter().enumerate() {
         println!("{}[{k}]{} {}", Fore::color(Fore::BdBlue), RESET, format.quality);
     
@@ -26,5 +25,5 @@ pub fn get(url: String) {
         .parse()
         .expect("Failed to parse choose to number");
 
-    download(formats[choose].url.to_string());
+    download(qualities[choose].url.to_string());
 }
