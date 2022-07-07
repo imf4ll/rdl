@@ -27,11 +27,7 @@ pub fn download(url: String, filename: String) {
     let mut file = File::create(&filename)
         .expect("Failed to create file");
 
-    let file_size = File::open(&filename)
-        .expect("Failed to open file")
-        .metadata()
-        .unwrap()
-        .len();
+    let file_size = get_file_size(&file);
 
     thread::spawn(move || {
         file
@@ -40,11 +36,7 @@ pub fn download(url: String, filename: String) {
     });
 
     while file_size < total_size {
-        let file_size = File::open(&filename)
-            .expect("Failed to open file")
-            .metadata()
-            .unwrap()
-            .len();
+        let file_size = get_file_size(&File::open(&filename).expect("Failed to open file"));
 
         pb.set_position(file_size);
 
@@ -52,7 +44,15 @@ pub fn download(url: String, filename: String) {
             pb.finish();
     
             println!("\n{}>>> Video downloaded succesfully!{}", Fore::color(Fore::BdGreen), RESET);
+            
             exit(3);
         }
     };
+}
+
+fn get_file_size(file: &File) -> u64 {
+    file
+        .metadata()
+        .unwrap()
+        .len()
 }
