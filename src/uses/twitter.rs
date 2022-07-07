@@ -1,7 +1,8 @@
+use std::io::stdin;
+
 use colorism::{foreground::Fore, util::RESET};
 use crate::utils::download::download;
 use crate::modules::twitter;
-use std::io::stdin;
 
 pub fn get(url: String, filename: String) {
     let qualities = twitter::get_video(url);
