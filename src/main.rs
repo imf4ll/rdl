@@ -2,16 +2,31 @@ mod modules;
 mod utils;
 mod uses;
 
-use std::env::args;
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(short, long, value_parser)]
+    url: String,
+
+    #[clap(short, long, value_parser, default_value = "video.mp4")]
+    filename: String,
+}
 
 fn main() {
-    let args: Vec<String> = args().collect();
+    let args = Args::parse();
 
-    if args.len() > 1 {
-        uses::twitter::get(args[1].to_string());
+    if args.url == "" {
+        panic!("Invalid URL provided");
     
     } else {
-        panic!("Specify at least a URL");
+        if args.url.contains("twitter") {
+            uses::twitter::get(args.url, args.filename);
 
+        } else {
+            panic!("Invalid URL provided");
+
+        }
     }
 }
