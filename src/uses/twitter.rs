@@ -3,7 +3,7 @@ use crate::utils::download::download;
 use crate::modules::twitter;
 use std::io::stdin;
 
-pub fn get(url: String) {
+pub fn get(url: String, filename: String) {
     let qualities = twitter::get_video(url);
 
     println!("{}[>] {} qualities available...{}\n", Fore::color(Fore::BdGreen), qualities.len(), RESET);
@@ -25,5 +25,5 @@ pub fn get(url: String) {
         .parse()
         .expect("Failed to parse choose to number");
 
-    download(qualities[choose].url.to_string());
+    download(qualities[choose].url.to_string(), filename);
 }
