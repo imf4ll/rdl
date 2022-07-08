@@ -1,16 +1,9 @@
-use std::io::stdin;
+use dialoguer::{theme::ColorfulTheme, Select};
 
-pub fn choose() -> usize {
-    let mut choose_str = String::new();
-
-    stdin()
-        .read_line(&mut choose_str)
-        .expect("Failed to parse choose");
-
-    let choose: usize = choose_str
-        .trim()
-        .parse()
-        .expect("Failed to parse choose to number");
-
-    choose
+pub fn choose(qualities: Vec<String>) -> usize {
+    Select::with_theme(&ColorfulTheme::default())
+        .default(0)
+        .items(&qualities)
+        .interact()
+        .unwrap()
 }
