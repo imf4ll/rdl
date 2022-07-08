@@ -3,9 +3,9 @@ use std::fs::File;
 use std::thread;
 use std::process::exit;
 
-use colorism::{foreground::Fore, util::RESET};
-use reqwest::blocking::get;
 use indicatif::{ProgressBar, ProgressStyle};
+use reqwest::blocking::get;
+use crate::logger;
 
 pub fn download(url: String, filename: String) {
     let video_req = get(url)
@@ -15,7 +15,7 @@ pub fn download(url: String, filename: String) {
         .content_length()
         .expect("Failed to get content length");
 
-    println!("");
+    println!();
 
     let pb = ProgressBar::new(total_size);
 
@@ -42,8 +42,9 @@ pub fn download(url: String, filename: String) {
 
         if file_size == total_size {
             pb.finish();
-    
-            println!("\n{}>>> Video downloaded succesfully!{}", Fore::color(Fore::BdGreen), RESET);
+   
+            println!();
+            logger::success(&format!("Downloaded \"{filename}\" successfully"));
             
             exit(3);
         }
