@@ -29,6 +29,9 @@ fn main() {
     } else if args.url.contains("facebook") {
         uses::facebook::get(args.url, args.filename);
 
+    } else if args.url.contains("rumble") {
+        uses::rumble::get(args.url, args.filename)
+
     } else {
         logger::error("Invalid URL provided");
 
