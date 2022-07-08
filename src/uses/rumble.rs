@@ -1,4 +1,3 @@
-use colorism::{foreground::Fore, util::RESET};
 use crate::utils::download::download;
 use crate::utils::choose::choose;
 use crate::modules::rumble;
@@ -9,11 +8,10 @@ pub fn get(url: String, filename: String) {
 
     logger::success(&format!("{} qualities available...\n", qualities.len()));
 
-    let qualities_borrow = &qualities;
-    for (k, format) in qualities_borrow.into_iter().enumerate() {
-        println!("{}[{k}]{} {}", Fore::color(Fore::BdBlue), RESET, format.quality);
-    
-    }
-
-    download(qualities[choose()].url.to_string(), filename);
+    download(qualities[choose(
+        qualities[..]
+            .iter()
+            .map(|i| i.quality.clone())
+            .collect::<Vec<String>>()
+    )].url.to_string(), filename);
 }
