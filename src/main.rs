@@ -1,6 +1,7 @@
 mod modules;
 mod utils;
 mod uses;
+mod logger;
 
 use clap::Parser;
 
@@ -17,16 +18,16 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    if args.url == "" {
-        panic!("Invalid URL provided");
-    
+    if args.filename == "video.mp4" {
+        logger::warn("Filename not provided, using default \"video.mp4\"");
+
+    }
+
+    if args.url.contains("twitter") {
+        uses::twitter::get(args.url, args.filename);
+
     } else {
-        if args.url.contains("twitter") {
-            uses::twitter::get(args.url, args.filename);
+        logger::error("Invalid URL provided");
 
-        } else {
-            panic!("Invalid URL provided");
-
-        }
     }
 }
