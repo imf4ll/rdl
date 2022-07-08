@@ -46,7 +46,7 @@ pub fn get_video(url: String) -> Vec<Format> {
         .text()
         .expect("Failed to parse information");
 
-    let formats: Vec<TempFormat> = serde_json::from_str (
+    let formats: Vec<TempFormat> = serde_json::from_str(
         formats_res
             .split("\"variants\":").collect::<Vec<&str>>()[1]
             .split("}}]},\"favorite_count\"").collect::<Vec<&str>>()[0]
