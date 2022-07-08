@@ -5,8 +5,8 @@ mod logger;
 
 use clap::Parser;
 
-#[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
+#[derive(Parser)]
+#[clap(version, about = "A tool to download videos from some places")]
 struct Args {
     #[clap(short, long, value_parser)]
     url: String,
