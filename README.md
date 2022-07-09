@@ -6,7 +6,7 @@
 ```bash
 git clone https://github.com/z3oxs/rdl.git
 cd rdl
-cargo install
+cargo install --path .
 ```
 
 or check [releases section](https://github.com/z3oxs/rdl/releases/tag/v0.1.0)
