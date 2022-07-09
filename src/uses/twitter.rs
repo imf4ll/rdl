@@ -8,10 +8,5 @@ pub fn get(url: String, filename: String) {
 
     logger::success(&format!("{} qualities available...\n", qualities.len()));
 
-    download(qualities[choose(
-        qualities[..]
-            .iter()
-            .map(|i| i.quality.clone())
-            .collect::<Vec<String>>()
-    )].url.to_string(), filename);
+    download(qualities[choose(&qualities)].url.to_string(), filename);
 }

@@ -1,10 +1,10 @@
+use crate::utils::types::Format;
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json;
 
 #[derive(Debug, Deserialize)]
 struct TempFormat {
-    mime_type: String,
     base_url: String,
     width: u32,
     height: u32,
@@ -14,12 +14,6 @@ struct TempFormat {
 pub struct StandardFormat {
     playable_url: String,
     playable_url_quality_hd: String,
-}
-
-pub struct Format {
-    pub url: String,
-    pub quality: String,
-    pub format: String,
 }
 
 pub fn get_video(url: String) -> Vec<Format> {
@@ -49,13 +43,11 @@ pub fn get_video(url: String) -> Vec<Format> {
     let mut qualities: Vec<Format> = vec![];
 
     qualities.push(Format {
-        format: String::from("video/mp4"),
         quality: String::from("SD w/ audio"),
         url: formats_with_audio.playable_url,
     });
     
     qualities.push(Format {
-        format: String::from("video/mp4"),
         quality: String::from("HD w/ audio"),
         url: formats_with_audio.playable_url_quality_hd,
     });
@@ -64,7 +56,6 @@ pub fn get_video(url: String) -> Vec<Format> {
         qualities.push(Format {
             url: format.base_url,
             quality: format!("{}x{}", format.width, format.height),
-            format: format.mime_type,
         });
     }
 

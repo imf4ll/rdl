@@ -1,3 +1,4 @@
+use crate::utils::types::Format;
 use reqwest::blocking::get;
 use serde::Deserialize;
 use serde_json;
@@ -12,11 +13,6 @@ struct TempFormat {
 struct TempFormatMeta {
     w: u32,
     h: u32,
-}
-
-pub struct Format {
-    pub url: String,
-    pub quality: String,
 }
 
 fn get_video_id(url: String) -> String {

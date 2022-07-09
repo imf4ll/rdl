@@ -1,3 +1,4 @@
+use crate::utils::types::Format;
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json;
@@ -11,11 +12,6 @@ struct GuestTokenResponse {
 struct TempFormat {
     content_type: String,
     url: String,
-}
-
-pub struct Format {
-    pub url: String,
-    pub quality: String,
 }
 
 fn get_token() -> String {
