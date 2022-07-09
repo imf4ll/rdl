@@ -9,6 +9,8 @@ cd rdl
 cargo install
 ```
 
+or check [releases section](https://github.com/z3oxs/rdl/releases/tag/v0.1.0)
+
 &nbsp;
 ## 🚀 Usage:
 Downloading a video from Twitter:
