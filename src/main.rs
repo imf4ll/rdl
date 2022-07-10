@@ -16,13 +16,18 @@ struct Args {
 }
 
 fn main() {
-    let args = Args::parse();
+    let mut args = Args::parse();
+    
+    let config = utils::config::parser();
 
-    if args.filename == "video.mp4" {
-        logger::warn("Filename not provided, using default \"video.mp4\"");
+    if config.path != "" && args.filename != "video.mp4" {
+        args.filename = format!("{}/{}", config.path, args.filename);
+
+    } else if config.path != "" {
+        args.filename = format!("{}/video.mp4", config.path);
 
     }
-
+    
     if args.url.contains("twitter") {
         uses::twitter::get(args.url, args.filename);
 
