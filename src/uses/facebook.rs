@@ -8,5 +8,8 @@ pub fn get(url: String, filename: String) {
 
     logger::success(&format!("{} qualities available...\n", qualities.len()));
 
-    download(qualities[choose(&qualities)].url.to_string(), filename);
+    match qualities.len() > 1 {
+        true => download(qualities[choose(&qualities)].url.to_string(), filename),
+        false => download(qualities[0].url.to_string(), filename),
+    }
 }
