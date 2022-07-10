@@ -6,20 +6,33 @@
 
 Linux and MacOS:
 ```bash
-git clone https://github.com/z3oxs/rdl.git
-cd rdl
+git clone https://github.com/z3oxs/rdl.git && cd rdl
 make install
 ```
 
 &nbsp;
+
 Windows and other systems:
 ```bash
-git clone https://github.com/z3oxs/rdl.git
-cd rdl
+git clone https://github.com/z3oxs/rdl.git && cd rdl
 cargo install --path .
 ```
 
 or check [releases section](https://github.com/z3oxs/rdl/releases/)
+
+## ❗️ Update:
+```bash
+git clone https://github.com/z3oxs/rdl.git && cd rdl
+make update
+```
+
+&nbsp;
+
+Or, if you maintain the source code
+```bash
+git pull origin master
+make update
+```
 
 &nbsp;
 ## 🚀 Usage:
