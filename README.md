@@ -44,3 +44,24 @@ rdl -u "https://twitter.com/USER/status/SOMESTATUS" -f "some/path/video.mp4"
 
 &nbsp;
 **If you want to contribute, make a issue requesting a new module or a pull request implementing a new module**
+
+&nbsp;
+
+## ⚙️ Configuration (Linux and MacOS):
+
+Default template: "config.json"
+```json
+{
+    "path": "path/to/your/folder"
+}
+```
+
+&nbsp;
+<div align="center">
+
+### Available options:
+| Option | Description |
+|--------|-------------|
+| path | Path to default folder |
+
+</div>
