@@ -15,8 +15,6 @@ pub fn download(url: String, filename: String) {
         .content_length()
         .expect("Failed to get content length");
 
-    println!();
-
     let pb = ProgressBar::new(total_size);
 
     pb
