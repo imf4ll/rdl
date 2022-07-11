@@ -8,9 +8,11 @@ use clap::Parser;
 #[derive(Parser)]
 #[clap(version, about = "A tool to download videos from some places")]
 struct Args {
+    // Video URL
     #[clap(short, long, value_parser)]
     url: String,
 
+    // Filename or path to save
     #[clap(short, long, value_parser, default_value = "video.mp4")]
     filename: String,
 }
@@ -35,8 +37,11 @@ fn main() {
         uses::facebook::get(args.url, args.filename);
 
     } else if args.url.contains("rumble") {
-        uses::rumble::get(args.url, args.filename)
+        uses::rumble::get(args.url, args.filename);
 
+    } else if args.url.contains("reddit") {
+        uses::reddit::get(args.url, args.filename);
+    
     } else {
         logger::error("Invalid URL provided");
 
