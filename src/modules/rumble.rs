@@ -1,6 +1,7 @@
 use crate::utils::types::Format;
 use reqwest::blocking::get;
 use serde::Deserialize;
+use crate::logger;
 use serde_json;
 
 #[derive(Debug, Deserialize)]
@@ -31,12 +32,19 @@ fn get_video_id(url: String) -> String {
 
 pub fn get_video(url: String) -> Vec<Format> {
     let video_response = get(
-        format!("https://rumble.com/embedJS/u3/?request=video&ver=2&v={}&ext=%7B%22ad_count%22%3Anull%7D&ad_wt=9043"
-            , get_video_id(url))
+        format!(
+            "https://rumble.com/embedJS/u3/?request=video&ver=2&v={}&ext=%7B%22ad_count%22%3Anull%7D&ad_wt=9043"
+            , get_video_id(url)
+        )
     )
         .expect("Failed to get video information")
         .text()
         .expect("Failed to parse video information");
+
+    if !video_response.contains("") {
+        logger::error("Invalid video parsed");
+
+    }
 
     let raw_formats = video_response
         .split("\"ua\":{\"mp4\":{").collect::<Vec<&str>>()[1]
@@ -58,6 +66,7 @@ pub fn get_video(url: String) -> Vec<Format> {
         qualities.push(Format {
             url: format.url,
             quality: format!("{}x{}", format.meta.w, format.meta.h),
+            audio: String::from(""),
         })
     }
 

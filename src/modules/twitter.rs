@@ -1,6 +1,7 @@
 use crate::utils::types::Format;
 use reqwest::blocking::Client;
 use serde::Deserialize;
+use crate::logger;
 use serde_json;
 
 #[derive(Deserialize)]
@@ -42,6 +43,11 @@ pub fn get_video(url: String) -> Vec<Format> {
         .text()
         .expect("Failed to parse information");
 
+    if !formats_res.contains("\"variants\":") {
+        logger::error("Invalid video parsed");
+
+    }
+
     let formats: Vec<TempFormat> = serde_json::from_str(
         formats_res
             .split("\"variants\":").collect::<Vec<&str>>()[1]
@@ -58,6 +64,7 @@ pub fn get_video(url: String) -> Vec<Format> {
             qualities.push(Format {
                 quality: quality.to_string(),
                 url: format.url,
+                audio: String::from(""),
             });
         }
     }
