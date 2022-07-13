@@ -8,11 +8,11 @@ use clap::Parser;
 #[derive(Parser)]
 #[clap(version, about = "A tool to download videos from some places")]
 struct Args {
-    // Video URL
+    /// Video URL
     #[clap(short, long, value_parser)]
     url: String,
 
-    // Filename or path to save
+    /// Filename or path to save
     #[clap(short, long, value_parser, default_value = "video.mp4")]
     filename: String,
 }
