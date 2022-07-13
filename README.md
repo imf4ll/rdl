@@ -4,6 +4,8 @@
 
 ## ❗️ Install:
 
+**You need ffmpeg to download some videos who separate video from audio**
+
 Linux and MacOS:
 ```bash
 git clone https://github.com/z3oxs/rdl.git && cd rdl
