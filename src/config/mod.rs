@@ -9,7 +9,7 @@ pub struct Config {
     pub path: String,
 }
 
-pub fn parser() -> Config {
+pub fn parse() -> Config {
     let path = match env::var("HOME") {
         Ok(string) => string,
         Err(_) => return Config {
@@ -25,5 +25,5 @@ pub fn parser() -> Config {
     };
 
     serde_json::from_str::<Config>(&content)
-        .expect("Failed to write config file")
+        .expect("Failed to read config file")
 }

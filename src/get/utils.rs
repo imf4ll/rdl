@@ -1,16 +1,17 @@
 use std::io::Write;
 use std::fs::File;
 use std::thread;
-use std::process::exit;
+use std::process::{exit, Command};
 
 use indicatif::{ProgressBar, ProgressStyle};
-use crate::utils::convert::convert;
 use reqwest::{blocking::get, StatusCode};
+use dialoguer::{Select, theme::ColorfulTheme};
 use crate::logger;
+use crate::utils::types::Format;
 
 pub fn download(url: String, filename: String, audio: String) {
     if audio == "" {
-        download_with_progress(&url, &filename);
+        with_progress(&url, &filename);
 
     } else {
         let valid_audio = get(&audio)
@@ -19,7 +20,7 @@ pub fn download(url: String, filename: String, audio: String) {
         if valid_audio.status() != StatusCode::OK {
             logger::warn("Failed to get audio from video, downloading only the video");
 
-            download_with_progress(&url, &filename);
+            with_progress(&url, &filename);
 
         } else {
             convert(&url, &audio, &filename)
@@ -31,7 +32,7 @@ pub fn download(url: String, filename: String, audio: String) {
     exit(3);
 }
 
-fn download_with_progress(url: &String, filename: &String) {
+fn with_progress(url: &String, filename: &String) {
     let video_req = get(url)
         .expect("Failed to request video binary");
         
@@ -72,6 +73,31 @@ fn download_with_progress(url: &String, filename: &String) {
             break;
         }
     }
+}
+
+pub fn choose(qualities: &Vec<Format>) -> usize {
+    let qualities_vec = qualities[..]
+        .iter()
+        .map(|i| i.quality.clone())
+        .collect::<Vec<String>>();
+
+    Select::with_theme(&ColorfulTheme::default())
+        .default(0)
+        .items(&qualities_vec)
+        .interact()
+        .unwrap()
+}
+
+fn convert(video: &String, audio: &String, filename: &String) -> std::io::Result<()> {
+    Command::new("ffmpeg")
+        .args(["-i", video, "-i", audio, "-y", filename])
+        .spawn()?
+        .wait()?;
+
+    println!();
+    logger::success(&format!("Converted successfully to {filename}"));
+
+    Ok(())
 }
 
 fn get_file_size(file: &File) -> u64 {

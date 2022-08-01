@@ -1,8 +1,12 @@
 mod modules;
 mod utils;
-mod uses;
 mod logger;
+mod config;
+mod get;
 
+use utils::types::Format;
+use crate::get::get;
+use crate::modules::*;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -19,8 +23,9 @@ struct Args {
 
 fn main() {
     let mut args = Args::parse();
+    let mut qualities: Vec<Format> = vec![];
     
-    let config = utils::config::parser();
+    let config = config::parse();
 
     if config.path != "" && args.filename != "video.mp4" {
         args.filename = format!("{}/{}", config.path, args.filename);
@@ -31,19 +36,21 @@ fn main() {
     }
     
     if args.url.contains("twitter") {
-        uses::twitter::get(args.url, args.filename);
+        qualities = twitter::get_video(args.url);
 
     } else if args.url.contains("facebook") {
-        uses::facebook::get(args.url, args.filename);
+        qualities = facebook::get_video(args.url);
 
     } else if args.url.contains("rumble") {
-        uses::rumble::get(args.url, args.filename);
+        qualities = rumble::get_video(args.url);
 
     } else if args.url.contains("reddit") {
-        uses::reddit::get(args.url, args.filename);
+        qualities = reddit::get_video(args.url);
     
     } else {
         logger::error("Invalid URL provided");
 
     }
+
+    get(qualities, args.filename);
 }
