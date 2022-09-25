@@ -19,12 +19,16 @@ struct Args {
     /// Filename or path to save
     #[clap(short, long, value_parser, default_value = "video.mp4")]
     filename: String,
+
+    /// Enable fast mode (skip format choosing)
+    #[clap(long, action)]
+    fast: bool,
 }
 
 fn main() {
     let mut args = Args::parse();
     let mut qualities: Vec<Format> = vec![];
-    
+
     let config = config::parse();
 
     if config.path != "" && args.filename != "video.mp4" {
@@ -52,5 +56,5 @@ fn main() {
 
     }
 
-    get(qualities, args.filename);
+    get(qualities, args.filename, args.fast);
 }
