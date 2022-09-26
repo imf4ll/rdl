@@ -47,8 +47,8 @@ As you can see, you need to only parse the video URL with "-u" flag.
 
 &nbsp;
 
-<div align="center">
 ### Flags:
+<div align="center">
 
 | Flag | Description |
 |------|-------------|
