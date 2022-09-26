@@ -49,7 +49,7 @@ As you can see, you need to only parse the video URL with "-u" flag.
 ### Flags
 
 | Flag | Description |
-|--------------------|
+|------|-------------|
 | --fast | Skip format choosing |
 
 Download a video and parsing a custom filename and path:
