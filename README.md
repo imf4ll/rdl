@@ -46,11 +46,17 @@ rdl -u "https://twitter.com/USER/status/SOMESTATUS"
 As you can see, you need to only parse the video URL with "-u" flag.
 
 &nbsp;
-### Flags
+
+<div align="center">
+### Flags:
 
 | Flag | Description |
 |------|-------------|
 | --fast | Skip format choosing |
+
+</div>
+
+&nbsp;
 
 Download a video and parsing a custom filename and path:
 ```bash
