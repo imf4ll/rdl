@@ -67,7 +67,8 @@ rdl -u "https://twitter.com/USER/status/SOMESTATUS" -f "some/path/video.mp4"
 - Twitter
 - Facebook
 - Rumble
-- Reddit (new)
+- Reddit
+- Pinterest (New!)
 
 &nbsp;
 **If you want to contribute, make a issue requesting a new module or a pull request implementing a new module**
