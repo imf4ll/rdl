@@ -49,8 +49,11 @@ fn main() {
         qualities = rumble::get_video(args.url);
 
     } else if args.url.contains("reddit") {
-        qualities = reddit::get_video(args.url);
-    
+        qualities = reddit::get_video(args.url);        
+
+    } else if args.url.contains("pinterest") {
+        qualities = pinterest::get_video(args.url);
+
     } else {
         logger::error("Invalid URL provided");
 
