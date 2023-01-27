@@ -29,43 +29,65 @@ pub fn get_video(url: String) -> Vec<Format> {
         .text()
         .expect("Failed to parse information");
 
-    if !formats_res.contains("\"representations\":") {
-        logger::error("Invalid video parsed");
-
-    }
-
-    let formats: Vec<TempFormat> = serde_json::from_str(
-        &formats_res
-            .split("\"representations\":").collect::<Vec<&str>>()[1]
-            .split(",\"video_id\"").collect::<Vec<&str>>()[0]
-    ).unwrap();
-
-    let formats_with_audio: StandardFormat = serde_json::from_str(
-        &format!("{{{}}}", &formats_res
-            .split("init\":null,").collect::<Vec<&str>>()[1]
-            .split(",\"spherical_").collect::<Vec<&str>>()[0])
-        ).unwrap();
-
     let mut qualities: Vec<Format> = vec![];
 
-    qualities.push(Format {
-        quality: String::from("SD w/ audio"),
-        url: formats_with_audio.playable_url,
-        audio: String::from(""),
-    });
-    
-    qualities.push(Format {
-        quality: String::from("HD w/ audio"),
-        url: formats_with_audio.playable_url_quality_hd,
-        audio: String::from(""),
-    });
+    if formats_res.contains("\"representations\":") {
+        let formats: Vec<TempFormat> = serde_json::from_str(
+            &formats_res
+                .split("\"representations\":").collect::<Vec<&str>>()[1]
+                .split(",\"video_id\"").collect::<Vec<&str>>()[0]
+        ).unwrap();
 
-    for format in formats {
+        let formats_with_audio: StandardFormat = serde_json::from_str(
+            &format!("{{{}}}", &formats_res
+                .split("init\":null,").collect::<Vec<&str>>()[1]
+                .split(",\"spherical_").collect::<Vec<&str>>()[0])
+            ).unwrap();
+
         qualities.push(Format {
-            url: format.base_url,
-            quality: format!("{}x{}", format.width, format.height),
+            quality: String::from("SD w/ audio"),
+            url: formats_with_audio.playable_url,
             audio: String::from(""),
         });
+        
+        qualities.push(Format {
+            quality: String::from("HD w/ audio"),
+            url: formats_with_audio.playable_url_quality_hd,
+            audio: String::from(""),
+        });
+
+        for format in formats {
+            qualities.push(Format {
+                url: format.base_url,
+                quality: format!("{}x{}", format.width, format.height),
+                audio: String::from(""),
+            });
+        }
+
+    } else if formats_res.contains("\"playable_url\":") {
+        let format_sd = &formats_res
+            .split("\"playable_url\":\"").collect::<Vec<&str>>()[1]
+            .split("\",\"playable_url").collect::<Vec<&str>>()[0];
+
+        qualities.push(Format {
+            url: format_sd.to_string().replace("\\", ""),
+            quality: String::from("SD"),
+            audio: String::from(""),
+        });
+
+        let format_hd = &formats_res
+            .split("\"playable_url_quality_hd\":\"").collect::<Vec<&str>>()[1]
+            .split("\",\"spherical").collect::<Vec<&str>>()[0];
+
+        qualities.push(Format {
+            url: format_hd.to_string().replace("\\", ""),
+            quality: String::from("HD"),
+            audio: String::from(""),
+        });
+
+    } else {
+        logger::error("Invalid video parsed");
+
     }
 
     qualities
