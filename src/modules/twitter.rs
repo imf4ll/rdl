@@ -58,7 +58,7 @@ pub fn get_video(url: String) -> Vec<Format> {
 
     for format in formats {
         let quality_vec: Vec<&str> = format.url.split("/").collect();
-        let quality = quality_vec[6];
+        let quality = quality_vec[quality_vec.len() - 2];
 
         if format.content_type == "video/mp4" {
             qualities.push(Format {
