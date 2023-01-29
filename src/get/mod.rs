@@ -95,14 +95,20 @@ fn with_progress(url: &String, filename: &String) {
 }
 
 fn choose(qualities: &Vec<Format>) -> usize {
-    let qualities_vec = qualities[..]
-        .iter()
-        .map(|i| i.quality.clone())
-        .collect::<Vec<String>>();
+    let mut qualities_with_length_vec: Vec<String> = vec![];
+
+    for q in qualities.iter() {
+        let length = blocking::get(&q.url)
+            .unwrap()
+            .content_length()
+            .unwrap();
+
+        qualities_with_length_vec.push(format!("{} ({})", q.quality, size(length)));
+    }
 
     Select::with_theme(&ColorfulTheme::default())
         .default(0)
-        .items(&qualities_vec)
+        .items(&qualities_with_length_vec)
         .interact()
         .unwrap()
 }
@@ -124,4 +130,16 @@ fn get_file_size(file: &File) -> u64 {
         .metadata()
         .unwrap()
         .len()
+}
+
+fn size(length: u64) -> String {
+    let size: f32 = length as f32 / 1000000.0;
+
+    if size < 1024.0 {
+        format!("{:.1} MB", size)
+    
+    } else {
+        format!("{:.1} GB", size)
+
+    }
 }
