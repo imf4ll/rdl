@@ -17,7 +17,7 @@ pub struct StandardFormat {
     playable_url_quality_hd: String,
 }
 
-pub fn get_video(url: String) -> Vec<Format> {
+pub fn get_video(url: String) -> (Vec<Format>, String) {
     let formats_req = Client::new();
 
     let formats_res = formats_req
@@ -28,6 +28,10 @@ pub fn get_video(url: String) -> Vec<Format> {
         .expect("Failed to request video information")
         .text()
         .expect("Failed to parse information");
+
+    let video_title = &formats_res
+        .split("\"message\":{\"ranges\":[],\"text\":\"").collect::<Vec<&str>>()[1]
+        .split("\",\"delight").collect::<Vec<&str>>()[0];
 
     let mut qualities: Vec<Format> = vec![];
 
@@ -90,5 +94,5 @@ pub fn get_video(url: String) -> Vec<Format> {
 
     }
 
-    qualities
+    return (qualities, video_title.to_string());
 }

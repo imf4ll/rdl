@@ -30,7 +30,7 @@ fn get_video_id(url: String) -> String {
     video_id.to_string()
 }
 
-pub fn get_video(url: String) -> Vec<Format> {
+pub fn get_video(url: String) -> (Vec<Format>, String) {
     let video_response = get(
         format!(
             "https://rumble.com/embedJS/u3/?request=video&ver=2&v={}&ext=%7B%22ad_count%22%3Anull%7D&ad_wt=9043"
@@ -60,6 +60,10 @@ pub fn get_video(url: String) -> Vec<Format> {
         )
     ).unwrap();
 
+    let video_title = &video_response
+        .split("\"title\":\"").collect::<Vec<&str>>()[1]
+        .split("\",\"author\":{").collect::<Vec<&str>>()[0];
+
     let mut qualities: Vec<Format> = vec![];
 
     for format in formats {
@@ -70,5 +74,5 @@ pub fn get_video(url: String) -> Vec<Format> {
         })
     }
 
-    qualities
+    return (qualities, video_title.to_string());
 }

@@ -9,7 +9,8 @@ use dialoguer::{Select, theme::ColorfulTheme};
 use crate::logger;
 use crate::utils::types::Format;
 
-pub fn get(qualities: Vec<Format>, filename: String, fast: bool) {
+pub fn get(qualities: Vec<Format>, title: String, filename: String, fast: bool) {
+    logger::success(&format!("Title: {title}\n"));
     logger::success(&format!("{} qualities available...\n", qualities.len()));
 
     if fast {

@@ -28,6 +28,7 @@ struct Args {
 fn main() {
     let mut args = Args::parse();
     let mut qualities: Vec<Format> = vec![];
+    let mut video_title: String = String::from("");
 
     let config = config::parse();
 
@@ -40,24 +41,24 @@ fn main() {
     }
     
     if args.url.contains("twitter") {
-        qualities = twitter::get_video(args.url);
+        (qualities, video_title) = twitter::get_video(args.url);
 
     } else if args.url.contains("facebook") {
-        qualities = facebook::get_video(args.url);
+        (qualities, video_title) = facebook::get_video(args.url);
 
     } else if args.url.contains("rumble") {
-        qualities = rumble::get_video(args.url);
+        (qualities, video_title) = rumble::get_video(args.url);
 
     } else if args.url.contains("reddit") {
-        qualities = reddit::get_video(args.url);        
+        (qualities, video_title) = reddit::get_video(args.url);
 
     } else if args.url.contains("pinterest") {
-        qualities = pinterest::get_video(args.url);
+        (qualities, video_title) = pinterest::get_video(args.url);
 
     } else {
         logger::error("Invalid URL provided");
 
     }
 
-    get(qualities, args.filename, args.fast);
+    get(qualities, video_title, args.filename, args.fast);
 }

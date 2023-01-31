@@ -3,7 +3,7 @@ use crate::utils::types::Format;
 use reqwest::blocking::get;
 use crate::logger;
 
-pub fn get_video(url: String) -> Vec<Format> {
+pub fn get_video(url: String) -> (Vec<Format>, String) {
     let res = get(format!("{url}.json"))
         .expect("Failed to request video information")
         .text()
@@ -13,6 +13,10 @@ pub fn get_video(url: String) -> Vec<Format> {
         logger::error("Invalid video parsed");
 
     }
+
+    let video_title = &res
+        .split("\"clicked\": false, \"title\":\"").collect::<Vec<&str>>()[1]
+        .split("\",\"link").collect::<Vec<&str>>()[0];
 
     let video_id = res
         .split("\"url_overridden_by_dest\": \"").collect::<Vec<&str>>()[1]
@@ -39,5 +43,5 @@ pub fn get_video(url: String) -> Vec<Format> {
         }
     }
 
-    qualities
+    return (qualities, video_title.to_string());
 }

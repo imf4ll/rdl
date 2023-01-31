@@ -9,11 +9,15 @@ struct PinterestQuality {
     height: u32,
 }
 
-pub fn get_video(url: String) -> Vec<Format> {
+pub fn get_video(url: String) -> (Vec<Format>, String) {
     let res = get(url)
         .expect("Failed to request video information")
         .text()
         .expect("Failed to parse video information");
+
+    let video_title = &res
+        .split("<title>").collect::<Vec<&str>>()[1]
+        .split("</title>").collect::<Vec<&str>>()[0];
 
     let quality: PinterestQuality = serde_json::from_str(
         format!("{}}}",
@@ -35,5 +39,5 @@ pub fn get_video(url: String) -> Vec<Format> {
         audio: String::from(""),
     });
 
-    qualities
+    return (qualities, video_title.to_string());
 }
