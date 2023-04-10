@@ -22,7 +22,6 @@ fn get_video_id(url: String) -> String {
         .text()
         .expect("Failed to parse video ID information");
 
-
     let video_id = request
         .split("\"video\":\"").collect::<Vec<&str>>()[1]
         .split("\"").collect::<Vec<&str>>()[0];
@@ -48,7 +47,7 @@ pub fn get_video(url: String) -> (Vec<Format>, String) {
 
     let raw_formats = video_response
         .split("\"ua\":{\"mp4\":{").collect::<Vec<&str>>()[1]
-        .split("},\"webm\"").collect::<Vec<&str>>()[0];
+        .split("},\"timeline\"").collect::<Vec<&str>>()[0];
 
     let formats: Vec<TempFormat> = serde_json::from_str(
         &format!("[{}]", raw_formats
@@ -62,7 +61,7 @@ pub fn get_video(url: String) -> (Vec<Format>, String) {
 
     let video_title = &video_response
         .split("\"title\":\"").collect::<Vec<&str>>()[1]
-        .split("\",\"author\":{").collect::<Vec<&str>>()[0];
+        .split("\",\"author\":").collect::<Vec<&str>>()[0];
 
     let mut qualities: Vec<Format> = vec![];
 

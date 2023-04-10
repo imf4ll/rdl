@@ -15,8 +15,8 @@ pub fn get_video(url: String) -> (Vec<Format>, String) {
     }
 
     let video_title = &res
-        .split("\"clicked\": false, \"title\":\"").collect::<Vec<&str>>()[1]
-        .split("\",\"link").collect::<Vec<&str>>()[0];
+        .split("\"clicked\": false, \"title\": \"").collect::<Vec<&str>>()[1]
+        .split("\", \"link").collect::<Vec<&str>>()[0];
 
     let video_id = res
         .split("\"url_overridden_by_dest\": \"").collect::<Vec<&str>>()[1]
