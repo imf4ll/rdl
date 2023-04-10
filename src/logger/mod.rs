@@ -3,7 +3,7 @@ use std::process::exit;
 use colorism::{foreground::Fore, util::RESET};
 
 pub fn success(message: &str) {
-    println!("{}√ {message}{RESET}", Fore::color(Fore::BdGreen));
+    println!("{}✔ {message}{RESET}", Fore::color(Fore::BdGreen));
 }
 
 pub fn warn(message: &str) {
@@ -11,7 +11,7 @@ pub fn warn(message: &str) {
 }
 
 pub fn error(message: &str) {
-    println!("{}✕ {message}{RESET}", Fore::color(Fore::BdRed));
+    println!("{}✘ {message}{RESET}", Fore::color(Fore::BdRed));
 
     exit(3);
 }
